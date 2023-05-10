@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: snowplow
+    database: analytics
+    schema: snowplow_external
+    
+    tables:
+      - name: event_ext_tbl
+        description: "External table of Snowplow events stored as JSON files"
+        external:
+          location: "@my_azure_stage/Data/Bronze/"  # reference an existing external stage
+          file_format: "( type = parquet )"      # fully specified here, or reference an existing file format
+          auto_refresh: false                    # requires configuring an event notification from Amazon S3 or Azure
+          pattern: ".*parquet"
+        columns:
+          - name: id
+            data_type: varchar(255)
+            description: "Application ID"
+          - name: first_name
+            data_type: varchar(255)
+            description: "A visit / session index"
